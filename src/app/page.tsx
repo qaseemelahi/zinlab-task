@@ -72,21 +72,22 @@ const Home = () => {
 
   const scrollLeft = () => {
     if (carouselRef.current) {
-      const newPosition = scrollPosition - 100;
-      setScrollPosition(newPosition >= 0 ? newPosition : 0);
-      if (carouselRef.current.scrollLeft !== undefined) {
-        carouselRef.current.scrollLeft = newPosition;
-      }
+      setScrollPosition((prevPosition) => {
+        const newPosition = prevPosition - 100;
+        const newPositionClamped = newPosition >= 0 ? newPosition : 0;
+        carouselRef.current.scrollLeft = newPositionClamped;
+        return newPositionClamped;
+      });
     }
   };
 
   const scrollRight = () => {
     if (carouselRef.current) {
-      const newPosition = scrollPosition + 100;
-      setScrollPosition(newPosition);
-      if (carouselRef.current.scrollLeft !== undefined) {
+      setScrollPosition((prevPosition) => {
+        const newPosition = prevPosition + 100;
         carouselRef.current.scrollLeft = newPosition;
-      }
+        return newPosition;
+      });
     }
   };
 
@@ -119,7 +120,7 @@ const Home = () => {
           Convert From PDF
         </h2>
         <div className='flex flex-row items-center w-full lg:overflow-hidden py-8 space-x-3'>
-          <div className='cursor-pointer w-[5%]' onClick={scrollLeft}>
+          <div className='cursor-pointer z-10' onClick={scrollLeft}>
             <Image src={Icons.LeftIcon} alt={'Left'} width={40} height={40} />
           </div>
           <div
@@ -147,7 +148,7 @@ const Home = () => {
               </div>
             ))}
           </div>
-          <div className='cursor-pointer w-[5%]' onClick={scrollRight}>
+          <div className='cursor-pointer z-10' onClick={scrollRight}>
             <Image src={Icons.RightIcon} alt={'Right'} width={40} height={40} />
           </div>
         </div>
