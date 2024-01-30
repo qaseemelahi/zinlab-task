@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import Image from 'next/image';
 import { Icons } from './assets/icons';
 
@@ -67,41 +67,28 @@ const Home = () => {
     },
   ];
 
-  const itemsPerPage = window.innerWidth <= 768 ? 1 : 5;
-  const totalItems = PDFTools.length;
+  const [scrollPosition, setScrollPosition] = useState(0);
+  const carouselRef = useRef<HTMLDivElement>(null);
 
-  const [visiblePDFToolsIndex, setVisiblePDFToolsIndex] = useState(0);
-
-  const handleScrollLeft = () => {
-    setVisiblePDFToolsIndex(
-      (prevIndex) => (prevIndex - 1 + totalItems) % totalItems
-    );
-  };
-
-  const handleScrollRight = () => {
-    setVisiblePDFToolsIndex((prevIndex) => (prevIndex + 1) % totalItems);
-  };
-
-  const visiblePDFTools = (() => {
-    const startIndex = visiblePDFToolsIndex % totalItems;
-    const endIndex = (startIndex + itemsPerPage) % totalItems;
-    const wrappedItems = [];
-
-    if (endIndex >= startIndex) {
-      for (let i = startIndex; i < endIndex; i++) {
-        wrappedItems.push({ ...PDFTools[i], index: i });
-      }
-    } else {
-      for (let i = 0; i < itemsPerPage; i++) {
-        wrappedItems.push({
-          ...PDFTools[(startIndex + i) % totalItems],
-          index: (startIndex + i) % totalItems,
-        });
+  const scrollLeft = () => {
+    if (carouselRef.current) {
+      const newPosition = scrollPosition - 100;
+      setScrollPosition(newPosition >= 0 ? newPosition : 0);
+      if (carouselRef.current.scrollLeft !== undefined) {
+        carouselRef.current.scrollLeft = newPosition;
       }
     }
+  };
 
-    return wrappedItems;
-  })();
+  const scrollRight = () => {
+    if (carouselRef.current) {
+      const newPosition = scrollPosition + 100;
+      setScrollPosition(newPosition);
+      if (carouselRef.current.scrollLeft !== undefined) {
+        carouselRef.current.scrollLeft = newPosition;
+      }
+    }
+  };
 
   return (
     <main className='flex flex-col h-full items-center bg-white dark:bg-black justify-between px-4 lg:px-16 py-8'>
@@ -126,27 +113,24 @@ const Home = () => {
           ))}
         </div>
       </div>
+
       <div className='w-full items-center justify-between'>
         <h2 className='text-base lg:text-3xl font-bold text-black dark:text-white'>
           Convert From PDF
         </h2>
-        <div className='flex flex-row items-center w-full lg:overflow-hidden py-8'>
-          <div className='cursor-pointer' onClick={handleScrollLeft}>
+        <div className='flex flex-row items-center w-full lg:overflow-hidden py-8 space-x-3'>
+          <div className='cursor-pointer w-[5%]' onClick={scrollLeft}>
             <Image src={Icons.LeftIcon} alt={'Left'} width={40} height={40} />
           </div>
           <div
-            className='flex lg:space-x-5 mx-0 lg:mx-3 h-full flex-wrap '
-            style={{
-              transition: 'transform 0.9s linear',
-              transform: `translateX(-${
-                (visiblePDFToolsIndex / totalItems) * 1
-              }%)`,
-            }}
+            className='flex-shrink-0 carousel rounded-box w-[90%] mx-3 overflow-x-auto'
+            ref={carouselRef}
           >
-            {visiblePDFTools.map((item, index) => (
+            {PDFTools.map((item) => (
               <div
-                key={index}
-                className={`flex flex-col justify-start items-start min-h-[220px] text-left p-5 bg-white dark:bg-black rounded-lg border border-[#EBEBEB] max-w-[100%] lg:max-w-[20%] w-[100%] lg:w-[18.5%] space-y-3 m-2 lg:m-0 transition-shadow duration-300 ease-in-out transform-gpu ${'hover:shadow-lg'}`}
+                key={item.title}
+                id={item.title}
+                className='carousel-item flex flex-col justify-start items-start text-left p-5 bg-white dark:bg-black rounded-lg border border-[#EBEBEB] max-w-[100%] lg:max-w-[20%] w-[100%] lg:w-[20%] space-y-3 m-2'
               >
                 <Image
                   src={item.Image}
@@ -163,7 +147,7 @@ const Home = () => {
               </div>
             ))}
           </div>
-          <div className='cursor-pointer' onClick={handleScrollRight}>
+          <div className='cursor-pointer w-[5%]' onClick={scrollRight}>
             <Image src={Icons.RightIcon} alt={'Right'} width={40} height={40} />
           </div>
         </div>
