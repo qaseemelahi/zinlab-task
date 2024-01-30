@@ -20,6 +20,7 @@ const Header = () => {
   ];
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -27,6 +28,14 @@ const Header = () => {
 
   const closeMenu = () => {
     setIsMenuOpen(false);
+  };
+
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
   };
 
   return (
@@ -53,7 +62,10 @@ const Header = () => {
             placeholder='Search for themes,tools and other stuff ...'
             required
           />
-          <div className='absolute inset-y-0 end-0 mr-5 flex items-center ps-3 pointer-events-none'>
+          <div
+            onClick={openModal}
+            className='absolute inset-y-0 end-0 mr-5 flex items-center ps-3 pointer-events-none'
+          >
             <Image src={Icons.SearchIcon} alt='Search' />
           </div>
         </div>
@@ -65,7 +77,7 @@ const Header = () => {
             Signup
           </button>
         </div>
-        <div className='flex lg:hidden w-[10%]'>
+        <div className='flex lg:hidden w-[10%] cursor-pointer'>
           <Image src={Icons.SearchIcon} alt='Search' />
         </div>
         {isMenuOpen && (
@@ -92,6 +104,23 @@ const Header = () => {
               </div>
               <ThemeSwitcher />
             </div>
+          </div>
+        )}
+        {isModalOpen && (
+          <div className='fixed inset-0 bg-white dark:bg-black h-screen w-screen p-4 flex flex-col items-center z-30'>
+            <button
+              onClick={closeModal}
+              className='absolute top-10 right-4 text-black cursor-pointer'
+            >
+              <Image src={Icons.CloseMenu} alt='Zin' width={20} height={20} />
+            </button>
+            <input
+              type='search'
+              id='default-search'
+              className='block w-full p-4  text-sm text-gray-900 border border-gray-300 rounded-3xl bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'
+              placeholder='Search for themes,tools and other stuff ...'
+              required
+            />
           </div>
         )}
       </div>
