@@ -3,7 +3,6 @@
 import { useState, useEffect } from 'react';
 import { useTheme } from 'next-themes';
 import Image from 'next/image';
-import { Icons } from '../assets/icons';
 import { FiMoon, FiSun } from 'react-icons/fi';
 
 export default function ThemeSwitcher() {
@@ -31,7 +30,7 @@ export default function ThemeSwitcher() {
         className='bg-gray-800 p-4 rounded-full'
         onClick={() => setTheme('light')}
       >
-        <FiSun />
+        <FiSun color='#fff' />
       </div>
     );
   }
@@ -39,7 +38,7 @@ export default function ThemeSwitcher() {
   if (resolvedTheme === 'light') {
     return (
       <div
-        className='bg-gray-800 p-4  rounded-full'
+        className='bg-gray-300 p-4  rounded-full'
         onClick={() => setTheme('dark')}
       >
         <FiMoon />

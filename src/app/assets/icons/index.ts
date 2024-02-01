@@ -9,7 +9,6 @@ import RotatePDF from './Rotate-PDF.svg';
 import ReplaceText from './replace-text-pdf.svg';
 import LeftIcon from './left.svg';
 import RightIcon from './right.svg';
-import PDFWord from './pdf-word.svg';
 import PDFExcel from './pdf-excel.svg';
 import PDFPPT from './PDF-PPT.svg';
 import PDFJPG from './PDF-JPG.svg';
@@ -18,9 +17,15 @@ import PDFRTF from './Image-in-RTX.svg';
 import MenuIcon from './hamburger.png';
 import CloseMenu from './cancel.png';
 import WhiteMenu from './menu-white.png';
+import WhiteFB from './facebook-app-symbol.png';
+import TwitterWhite from './twitter (1).png';
+import YouTubeWhite from './youtube.png';
 
 export const Icons = {
   LogoMain,
+  WhiteFB,
+  TwitterWhite,
+  YouTubeWhite,
   WhiteMenu,
   CloseMenu,
   PDFExcel,
